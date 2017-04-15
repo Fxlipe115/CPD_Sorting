@@ -14,6 +14,8 @@ all: $(OBJ)
 	$(LINKER) -o $(EXEC) $^ $(LFLAGS)
 
 bin/%.o: source/%.cpp
+#uncomment on linux
+#	@mkdir -p bin
 	$(CC) -o $@ $< $(CFLAGS) 
 
 clean:
