@@ -5,11 +5,11 @@
 
 class BubbleSort : public SortingAlg{
 	private:
-		int swaps;
+		unsigned int swaps;
 	public:
 		BubbleSort(std::vector<int>& list);
 		void sort(std::vector<int> (*f)(int) = nullptr) override;
-		void generateStats(std::string file) override;
+		void generateStats(std::string name) override;
 };
 
 #endif

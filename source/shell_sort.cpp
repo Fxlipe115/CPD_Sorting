@@ -1,7 +1,8 @@
 #include <fstream>
+#include <iomanip>
 #include "shell_sort.hpp"
 
-ShellSort::ShellSort(std::vector<int>& list) : SortingAlg(list) {}
+ShellSort::ShellSort(std::vector<int>& list) : SortingAlg(list), iterations(0), totalSwaps(0) {}
 
 void ShellSort::sort(std::vector<int> (*f)(int)){
 	//recebe função de atualização do h como parâmetro
@@ -17,7 +18,7 @@ void ShellSort::sort(std::vector<int> (*f)(int)){
 		while (h > 1) { // reduz tamanho h
 			iterations++;
 			iterSwap = 0;
-			
+
 			h /= (*f)(h)[1];
 			for (i = h; i < (int)list.size(); i++) { // ordena segmentos
 				chave = list[i];
@@ -35,8 +36,26 @@ void ShellSort::sort(std::vector<int> (*f)(int)){
 	}
 }
 
-void ShellSort::generateStats(std::string file){
-	
+void ShellSort::generateStats(std::string name){
+	for(int x : list){
+		totalSwaps += x;
+	}
+
+	std::ofstream file(name + ".data");
+
+	file << "# For array of size " << list.size() << std::endl;
+	file << "# Using Shell Sort" << std::endl;
+	file << "# Total number of iterations = " << iterations << std::endl;
+	file << "# Total number of swaps = " << totalSwaps << std::endl;
+	file << "# Iteration | Segments | Swaps" << std::endl;
+
+	for(int i = 0; i < iterations; i++){
+		file << std::setw(4) << i + 1 << " ";
+		file << std::setw(10) << segments[i] << " ";
+		file << std::setw(10) << swaps [i] << std::endl;
+	}
+
+	file.close();
 }
 
 std::vector<int> seq1(int h){

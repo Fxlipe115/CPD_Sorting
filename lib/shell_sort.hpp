@@ -9,11 +9,11 @@ class ShellSort : public SortingAlg{
 		int iterations;
 		std::vector<int> segments;
 		std::vector<int> swaps;
-		int totalSwaps;
+		unsigned int totalSwaps;
 	public:
 		ShellSort(std::vector<int>& list);
 		void sort(std::vector<int> (*f)(int) = nullptr) override;
-		void generateStats(std::string file) override;
+		void generateStats(std::string name) override;
 };
 
 std::vector<int> seq1(int h);

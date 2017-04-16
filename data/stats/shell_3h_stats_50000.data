@@ -1,0 +1,15 @@
+# For array of size 50000
+# Using Shell Sort
+# Total number of iterations = 10
+# Total number of swaps = 817983073
+# Iteration | Segments | Swaps
+   1      29524      10141
+   2       9841      30843
+   3       3280      57802
+   4       1093      81790
+   5        364     108827
+   6        121     158851
+   7         40     189361
+   8         13     293730
+   9          4     182331
+  10          1      74164
