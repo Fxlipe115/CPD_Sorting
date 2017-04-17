@@ -37,7 +37,8 @@ void ShellSort::sort(std::vector<int> (*f)(int)){
 }
 
 void ShellSort::generateStats(std::string name){
-	for(int x : list){
+	totalSwaps = 0;
+	for(int x : swaps){
 		totalSwaps += x;
 	}
 
