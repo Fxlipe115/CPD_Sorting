@@ -11,14 +11,14 @@ OBJ=$(addprefix bin/,$(notdir $(SRC:.cpp=.o)))
 EXEC=main
 
 all: $(OBJ)
-#uncomment on linux
-#	@mkdir -p times
-#	@mkdir -p stats
+#comment on windows
+	@mkdir -p times
+	@mkdir -p stats
 	$(LINKER) -o $(EXEC) $^ $(LFLAGS)
 
 bin/%.o: source/%.cpp
-#uncomment on linux
-#	@mkdir -p bin
+#comment on windows
+	@mkdir -p bin
 	$(CC) -o $@ $< $(CFLAGS)
 
 clean:
