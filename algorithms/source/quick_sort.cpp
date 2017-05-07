@@ -3,7 +3,7 @@
 #include <fstream>
 #include <cstdlib>
 
-QuickSort::QuickSort(std::vector<int>& list) : SortingAlg(list), totalSwaps(0) {}
+QuickSort::QuickSort(std::vector<int>& list) : SortingAlg(list), totalSwaps(0), recursiveCalls(0) {}
 
 void QuickSort::sort(std::vector<int> (*f)(std::vector<int>&)){
   if(f != nullptr){
@@ -58,19 +58,22 @@ std::vector<int> partition(std::vector<int>& C){
   C.pop_back();
 
   int swaps = 0;
-  int chave, i, j;
-	chave = C[right]; i = left; j = right;
-	for (;;) {
-		while(C[i] < chave) i++ ;
-		while(C[--j] > chave) j--;
-		if (i >= j) break;
-		std::swap (C[i], C[j]);
-    swaps++;
-	}
-	std::swap (C[i], C[right]);
+  int chave = C[right];
+  int i = (left - 1);
+  int j;
+
+  for (j = left; j <= right- 1; j++){
+    if (C[j] <= chave){
+      i++;
+      std::swap(C[i], C[j]);
+      swaps++;
+    }
+  }
+  std::swap(C[i + 1], C[right]);
   swaps++;
-  int ratio = abs(i-j);
-  std::vector<int> pivot = {i,swaps,ratio};
+
+  int ratio = abs((i+1-right)-(i+1-left));
+  std::vector<int> pivot = {i+1,swaps,ratio};
 	return pivot;
 }
 
@@ -82,21 +85,22 @@ std::vector<int> randPartition(std::vector<int>& C){
   C.pop_back();
 
   int swaps = 0;
-  int chave = rand() % (right + 1);
+  int i = left-1, j;
+  int chave = (rand() % (right+1-left)) + left;
   std::swap(C[right], C[chave]);
   swaps++;
-  chave = C[chave];
-  int i = left, j = right;
-  for (;;) {
-		while(C[i] < chave) i++ ;
-		while(C[--j] > chave) j--;
-		if (i >= j) break;
-		std::swap (C[i], C[j]);
-    swaps++;
-	}
-	std::swap (C[i], C[right]);
+  chave = C[right];
+  for (j = left; j <= right- 1; j++){
+    if (C[j] <= chave){
+      i++;
+      std::swap(C[i], C[j]);
+      swaps++;
+    }
+  }
+  std::swap(C[i + 1], C[right]);
   swaps++;
-  int ratio = abs(i-j);
-  std::vector<int> pivot = {i,swaps,ratio};
+
+  int ratio = abs((i+1-right)-(i+1-left));
+  std::vector<int> pivot = {i+1,swaps,ratio};
 	return pivot;
 }
