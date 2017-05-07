@@ -12,8 +12,8 @@ EXEC=main
 
 all: $(OBJ)
 #comment on windows
-	@mkdir -p times
-	@mkdir -p stats
+	@mkdir -p data/times
+	@mkdir -p data/stats
 	$(LINKER) -o $(EXEC) $^ $(LFLAGS)
 
 bin/%.o: source/%.cpp
