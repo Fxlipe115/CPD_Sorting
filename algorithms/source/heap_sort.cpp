@@ -4,7 +4,7 @@ HeapSort::HeapSort(std::vector<int>& list) : SortingAlg(list) {}
 
 void HeapSort::sort(std::vector<int> (*f)(std::vector<int>&)){
   if(f != nullptr){
-
+    //TODO
   }
 }
 

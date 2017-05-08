@@ -66,6 +66,7 @@ int findKeys(SortingAlg& keys, SortingAlg& padlocks, std::string name, bool rand
   }else{
     keys.sort(randPartition);
   }
+  keys.generateStats("data/keys_"+name);
   end = clock();
   t = (end - start)/(double)CLOCKS_PER_SEC;
   std::cout << name << " took " << std::setprecision(10) << t << "s to sort keys.\n";
@@ -77,6 +78,7 @@ int findKeys(SortingAlg& keys, SortingAlg& padlocks, std::string name, bool rand
   }else{
     padlocks.sort(randPartition);
   }
+  padlocks.generateStats("data/padlocks_"+name);
   end = clock();
   t = (end - start)/(double)CLOCKS_PER_SEC;
   std::cout << name << " took " << std::setprecision(10) << t << "s to sort padlocks.\n";
