@@ -1,6 +1,6 @@
 CC=g++ -std=c++11 -c
 
-CFLAGS=-Wall -ggdb3 -I"../algorithms/lib"
+CFLAGS=-Wall -ggdb3 -I"../algorithms/lib" -O3
 
 LINKER=g++
 

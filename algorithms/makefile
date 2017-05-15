@@ -1,6 +1,6 @@
 CC=g++ -std=c++11 -c
 
-CFLAGS=-Wall -ggdb3 -Ilib
+CFLAGS=-Wall -ggdb3 -Ilib -O3
 
 SRC=$(wildcard source/*.cpp)
 
