@@ -1,18 +1,21 @@
-def mergeSort(l):
+def mergeSort(l,key=None,reverse=False):
+    if key is None:
+        key = lambda x: x
     size = len(l)
     if size <= 1:
         return l
     else:
         middle = size//2
-        llist = mergeSort(l[:middle])
-        rlist = mergeSort(l[middle:])
+        llist = mergeSort(l[:middle],key,reverse)
+        rlist = mergeSort(l[middle:],key,reverse)
 
-        return merge(llist,rlist)
+        return _merge(llist,rlist,key,reverse)
 		
-def merge(left,right):
+def _merge(left,right,key,reverse=False):
+    f = (lambda x,y: x > y) if reverse else (lambda x,y: y > x)
     if len(left) > 0 and len(right) > 0:
-            v = left.pop(0) if left[0] < right[0] else right.pop(0)
-            return [v] + merge(left,right)
+            v = left.pop(0) if f(key(left[0]),key(right[0])) else right.pop(0)
+            return [v] + _merge(left,right,key,reverse)
     else:
             return left + right
 
