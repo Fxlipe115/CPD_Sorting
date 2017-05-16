@@ -7,28 +7,14 @@ def mergeSort(l):
         llist = mergeSort(l[:middle])
         rlist = mergeSort(l[middle:])
 
-        l.clear()
-        stop = False
-        linserted, rinserted = False, False
-        while not stop:
-            try:
-                if not linserted:
-                    lvalue = llist.pop(0)
-                    linserted = False
-                if not rinserted:
-                    rvalue = rlist.pop(0)
-                    rinserted = False
-            except IndexError:
-                stop = True
-            else:
-                if lvalue < rvalue:
-                    value = lvalue
-                    linserted = True
-                else:
-                    value = rvalue
-                    rinserted = True
-                l.append(value)
-        return l + llist + rlist
+        return merge(llist,rlist)
+		
+def merge(left,right):
+    if len(left) > 0 and len(right) > 0:
+            v = left.pop(0) if left[0] < right[0] else right.pop(0)
+            return [v] + merge(left,right)
+    else:
+            return left + right
 
 if __name__ == '__main__':
     l = [7,6,5,4,3,1,6,3,4,2,7,8,0]
