@@ -36,10 +36,18 @@ def insertionSort(l):
 def radixSort(l,radix=10,msd=False):
     for i,_ in enumerate(l):
         l[i] = int(l[i] * (10**6))
-    passes = int(round(log(maxAbs(a_list),base)) + 1)
+    passes = int(round(log(max(min(l),max(l),key=abs),radix)) + 1)
+    for i in range(passes):
+        buckets = [[]]*10
+        for x in l:
+            buckets[int((x / (radix**i)) % radix)].append(x)
+        l.clear()
+        for m in buckets:
+            l.extend(m)
+			
     
 
 
 if __name__ == '__main__':
     l = [7,6,5,4,3,1,6,3,4,2,7,8,0]
-    print(mergeSort(l))
+    print(radixSort(l))
