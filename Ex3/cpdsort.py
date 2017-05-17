@@ -1,4 +1,5 @@
 from math import log
+import time
 
 def mergeSort(l,key=None,reverse=False,k=0):
     if key is None:
@@ -72,3 +73,12 @@ if __name__ == '__main__':
     print(radixSort(l,radix=2))
     print(radixSort(l2))
     print(radixSort(l2,radix=2))
+    start = time.time()
+    print(mergeSort(l))
+    print("%s"%(time.time()-start))
+    start = time.time()
+    print(mergeSort(l,k=10))
+    print("%s"%(time.time()-start))
+    start = time.time()
+    print(mergeSort(l,k=5))
+    print("%s"%(time.time()-start))
