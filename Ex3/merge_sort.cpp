@@ -58,11 +58,6 @@ void mergeSort(std::vector<int>& l,int k,int low,int high){
         mergeSort(l,k,low,middle+low-1);
         mergeSort(l,k,low+middle,high);
 
-        std::vector<int>::iterator b = l.begin(), m = l.begin(), e = l.begin();
-        std::advance(b,low);
-        std::advance(m,middle);
-        std::advance(e,high+1);
-
-        std::inplace_merge(b,m,e);
+        std::merge(l.begin()+low,l.begin()+low+middle,l.begin()+low+middle,l.begin()+high+1,l.begin()+low);
     }
 }
