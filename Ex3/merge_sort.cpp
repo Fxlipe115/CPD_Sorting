@@ -46,7 +46,7 @@ void insertion_sort(std::vector<int> C) {
 }
 
 void mergeSort(std::vector<int>& l,int k){
-    mergeSort(l,k,0,10);
+    mergeSort(l,k,0,l.size()-1);
 }
 
 void mergeSort(std::vector<int>& l,int k,int low,int high){
@@ -58,6 +58,12 @@ void mergeSort(std::vector<int>& l,int k,int low,int high){
         mergeSort(l,k,low,middle+low-1);
         mergeSort(l,k,low+middle,high);
 
-        std::merge(l.begin()+low,l.begin()+low+middle,l.begin()+low+middle,l.begin()+high+1,l.begin()+low);
+        std::vector<int> aux(size,0);
+
+        std::merge(l.begin()+low,l.begin()+low+middle,l.begin()+low+middle,l.begin()+high+1,aux.begin());
+        
+        for(int i = 0, j = low; i < size; i++, j++){
+            l[j] = aux[i];
+        }
     }
 }

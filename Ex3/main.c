@@ -4,8 +4,8 @@
 
 int main(){
     std::vector<int> v;
-    for(int i = 0; i < 10; i++){
-        v.push_back(rand()%100);
+    for(int i = 0; i < 1000; i++){
+        v.push_back(rand()%10000);
     }
 
     std::vector<int> v0(v);
