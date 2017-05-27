@@ -1,45 +1,6 @@
 from math import log
-import time
 
-def mergeSort(l,key=None,reverse=False,k=0):
-    if key is None:
-        key = lambda x: x
-    size = len(l)
-    if size == k:
-        return insertionSort(l)
-    elif size <= 1:
-        return l
-    else:
-        middle = size//2
-        llist = mergeSort(l[:middle],key,reverse)
-        rlist = mergeSort(l[middle:],key,reverse)
-
-        return _merge(llist,rlist,key,reverse)
-
-def _merge(left,right,key,reverse=False):
-    f = (lambda x,y: x > y) if reverse else (lambda x,y: y > x)
-    if len(left) > 0 and len(right) > 0:
-            v = left.pop(0) if f(key(left[0]),key(right[0])) else right.pop(0)
-            return [v] + _merge(left,right,key,reverse)
-    else:
-            return left + right
-
-
-def insertionSort(l,key=None,reverse=False):
-    if key is None:
-        key = lambda x: x
-    for i in range(1, len(l)):
-        j = i-1
-        chave = key(l[i])
-        obj = l[i]
-        while ((key(l[j]) < chave) if reverse else (key(l[j]) > chave)) and (j >= 0):
-           l[j+1] = l[j]
-           j -= 1
-        l[j+1] = obj
-    return l
-
-
-def radixSort(li,radix=10,msd=False):
+def radixSort(li,radix=10):
     l2 = [[],[]]
     for i in li:
         if i < 0:
@@ -65,20 +26,10 @@ def radixSort(li,radix=10,msd=False):
     return l2[0] + l2[1]
 
 
-
 if __name__ == '__main__':
     l = [34.234, 45.34, 67.21, 7.5674, 234.98, 123.321, 65.78, 84.001, 0.0001, 9.0123]
     l2 = [-34.234, 45.34, -67.21, 7.5674, -234.98, 123.321, -65.78, 84.001, -0.0001, 9.0123]
+    
+    print('')
     print(radixSort(l))
-    print(radixSort(l,radix=2))
     print(radixSort(l2))
-    print(radixSort(l2,radix=2))
-    start = time.time()
-    print(mergeSort(l))
-    print("%s"%(time.time()-start))
-    start = time.time()
-    print(mergeSort(l,k=10))
-    print("%s"%(time.time()-start))
-    start = time.time()
-    print(mergeSort(l,k=5))
-    print("%s"%(time.time()-start))

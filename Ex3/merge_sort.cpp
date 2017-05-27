@@ -60,7 +60,9 @@ void mergeSort(std::vector<int>& l,int k,int low,int high){
 
         std::vector<int> aux(size,0);
 
-        std::merge(l.begin()+low,l.begin()+low+middle,l.begin()+low+middle,l.begin()+high+1,aux.begin());
+        std::merge(l.begin()+low,l.begin()+low+middle,
+		l.begin()+low+middle,l.begin()+high+1,
+		aux.begin());
         
         for(int i = 0, j = low; i < size; i++, j++){
             l[j] = aux[i];
