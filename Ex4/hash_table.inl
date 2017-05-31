@@ -58,7 +58,7 @@ int cpd::HashTable<T>::getOccupancy(){
 
 template <typename T>
 void cpd::HashTable<T>::insert(T item){
-  table[hash(item)].push_back(item);
+  table[hash(item) % tableSize].push_back(item);
   occupancy++;
   if(occupancy > 3 * (int)(tableSize / 4)){
     resize();
@@ -67,7 +67,7 @@ void cpd::HashTable<T>::insert(T item){
 
 template <typename T>
 void cpd::HashTable<T>::remove(T item){ //TODO change argument to iterator
-  Bucket& bucket = table[hash(item)];
+  Bucket& bucket = table[hash(item) % tableSize];
 
   typename Bucket::iterator it = std::find(bucket.begin(),bucket.end(),item);
 
@@ -80,7 +80,7 @@ void cpd::HashTable<T>::remove(T item){ //TODO change argument to iterator
 
 template <typename T>
 bool cpd::HashTable<T>::search(T item){ //TODO change return to iterator
-  Bucket& bucket = table[hash(item)];
+  Bucket& bucket = table[hash(item) % tableSize];
 
   typename Bucket::iterator it = std::find(bucket.begin(),bucket.end(),item);
 
