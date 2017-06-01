@@ -66,68 +66,138 @@ void cpd::HashTable<T>::insert(T item){
 }
 
 template <typename T>
-void cpd::HashTable<T>::remove(T item){ //TODO change argument to iterator
-  Bucket& bucket = table[hash(item) % tableSize];
-
-  typename Bucket::iterator it = std::find(bucket.begin(),bucket.end(),item);
-
-  if(it != bucket.end()){
-    bucket.erase(it);
-
-    occupancy--;
-  }
+void cpd::HashTable<T>::remove(iterator item){
+  (*item).curBucket.erase((*item).curItem);
+  occupancy--;
 }
 
 template <typename T>
-bool cpd::HashTable<T>::search(T item){ //TODO change return to iterator
-  Bucket& bucket = table[hash(item) % tableSize];
+typename cpd::HashTable<T>::iterator cpd::HashTable<T>::search(T item){
+  typename Table::iterator bucket = table.begin() + (hash(item) % tableSize);
 
-  typename Bucket::iterator it = std::find(bucket.begin(),bucket.end(),item);
+  typename Bucket::iterator it = std::find((*bucket).begin(),(*bucket).end(),item);
 
-  return (it != bucket.end());
+  if(it != (*bucket).end()){
+    return iterator(*this, bucket, it);
+  }else{
+    return end();
+  }
 }
 
 
 //===============Iterator===============
 template <typename T>
 cpd::HashIter<T>::HashIter(HashTable<T>& ht, int offset)
- : hashTable(ht), offset(offset)
+ : hashTable(ht){
+  if(offset == 0){ // begin iterator
+    curBucket = hashTable.table.begin();
+    bool flag = true;
+    while(flag){
+      if(curBucket != hashTable.table.end()){
+        if((*curBucket).empty()){
+          curBucket++;
+        }else{ // found first non-empty bucket
+          flag = false;
+        }
+      }else{ // empty table
+        flag = false;
+        curBucket--;
+      }
+      curItem = (*curBucket).begin();
+    }
+  }else{ // end iterator
+    typename HashTable<T>::Table::reverse_iterator aux = hashTable.table.rbegin();
+    bool flag = true;
+    while(flag){
+      if(aux != hashTable.table.rend()){
+        if((*aux).empty()){
+          aux++;
+        }else{ // found last non-empty bucket
+          flag = false;
+          curBucket = aux.base();
+        }
+      }else{ // empty table
+        flag = false;
+        curBucket = --hashTable.table.end();
+      }
+      curItem = (*curBucket).end();
+    }
+  }
+}
+
+template <typename T>
+cpd::HashIter<T>::HashIter(HashTable<T>& ht,
+  typename HashTable<T>::Table::iterator bucket,
+  typename HashTable<T>::Bucket::iterator item)
+ : hashTable(ht), curBucket(bucket), curItem(item)
 {}
 
 template <typename T>
 cpd::HashIter<T>::HashIter(HashIter<T>& hi) // copy constructor
- : hashTable(hi.hashTable), offset(hi.offset)
+ : hashTable(hi.hashTable),
+   curBucket(hi.curBucket), curItem(hi,curItem)
 {}
 
 template <typename T>
-bool cpd::HashIter<T>::operator==(const HashIter<T> &other){
+bool cpd::HashIter<T>::operator==(const HashIter<T>& other){
   bool sameHashTable = this->hashTable == other.hashTable;
-  bool sameOffset = this->offset == other.offset;
-  return sameHashTable && sameOffset;
+  bool sameItem = this->curItem == other.curItem;
+  return sameHashTable && sameItem;
 }
 
 template <typename T>
-bool cpd::HashIter<T>::operator!=(const HashIter<T> &other){
+bool cpd::HashIter<T>::operator!=(const HashIter<T>& other){
   return !(*this == other);
 }
 
 template <typename T>
 T& cpd::HashIter<T>::operator*(){
-  //========================
-  //TODO
-  //========================
-  return hashTable[offset];
+  return *curItem;
 }
 
 template <typename T>
 cpd::HashIter<T>& cpd::HashIter<T>::operator++(){ // prefix: ++iter
-  ++offset;
+  ++curItem;
+  if(curItem == curBucket.end()){
+    ++curBucket;
+    bool flag = true;
+    while(flag){
+      if(curBucket != hashTable.table.end()){
+        if((*curBucket).empty()){
+          curBucket++;
+        }else{ // found non-empty bucket
+          flag = false;
+        }
+      }else{ // end of table
+        flag = false;
+        curBucket--;
+      }
+      curItem = (*curBucket).begin();
+    }
+  }
   return *this;
 }
 
 template <typename T>
 cpd::HashIter<T> cpd::HashIter<T>::operator++(int){ //postfix: iter++
   HashIter<T> clone(*this);
-  ++offset;
+  ++curItem;
+  if(curItem == curBucket.end()){
+    ++curBucket;
+    bool flag = true;
+    while(flag){
+      if(curBucket != hashTable.table.end()){
+        if((*curBucket).empty()){
+          curBucket++;
+        }else{ // found non-empty bucket
+          flag = false;
+        }
+      }else{ // end of table
+        flag = false;
+        curBucket--;
+      }
+      curItem = (*curBucket).begin();
+    }
+  }
   return clone;
 }

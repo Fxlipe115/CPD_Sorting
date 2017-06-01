@@ -26,13 +26,6 @@ namespace cpd{
       unsigned long hash(std::string value);
       unsigned long hash(int value);
     public:
-      HashTable();
-      int getSize();
-      int getOccupancy();
-      void insert(T item);
-      void remove(T item); //TODO change argument to iterator
-      bool search(T item); //TODO change return to iterator
-
       // for use of iterator
       friend class HashIter<T>;
       typedef HashIter<T> iterator;
@@ -43,6 +36,13 @@ namespace cpd{
       typedef T& reference;
       iterator begin(){return iterator(*this, 0);};
       iterator end(){return iterator(*this, occupancy);};
+
+      HashTable();
+      int getSize();
+      int getOccupancy();
+      void insert(T item);
+      void remove(iterator item); //TODO change argument to iterator
+      iterator search(T item); //TODO change return to iterator
   };
 
     //===============Iterator===============
@@ -50,9 +50,13 @@ namespace cpd{
   class HashIter{
     private:
       HashTable<T>& hashTable;
-      int offset;
+      typename HashTable<T>::Table::iterator curBucket;
+      typename HashTable<T>::Bucket::iterator curItem;
     public:
       HashIter(HashTable<T>& ht, int offset);
+      HashIter(HashTable<T>& ht,
+        typename HashTable<T>::Table::iterator bucket,
+        typename HashTable<T>::Bucket::iterator item);
       HashIter(HashIter<T>& hi); // copy constructor
       bool operator==(const HashIter<T>& other);
       bool operator!=(const HashIter<T>& other);
