@@ -84,12 +84,21 @@ typename cpd::HashTable<T>::iterator cpd::HashTable<T>::search(T item){
   }
 }
 
+template <typename T>
+typename cpd::HashTable<T>::iterator cpd::HashTable<T>::begin(){
+  return iterator(*this, true);
+}
+
+template <typename T>
+typename cpd::HashTable<T>::iterator cpd::HashTable<T>::end(){
+  return iterator(*this, false);
+}
 
 //===============Iterator===============
 template <typename T>
-cpd::HashIter<T>::HashIter(HashTable<T>& ht, int offset)
+cpd::HashIter<T>::HashIter(HashTable<T>& ht, bool isBegin)
  : hashTable(ht){
-  if(offset == 0){ // begin iterator
+  if(isBegin){ // begin iterator
     curBucket = hashTable.table.begin();
     bool flag = true;
     while(flag){
@@ -106,22 +115,8 @@ cpd::HashIter<T>::HashIter(HashTable<T>& ht, int offset)
       curItem = (*curBucket).begin();
     }
   }else{ // end iterator
-    typename HashTable<T>::Table::reverse_iterator aux = hashTable.table.rbegin();
-    bool flag = true;
-    while(flag){
-      if(aux != hashTable.table.rend()){
-        if((*aux).empty()){
-          aux++;
-        }else{ // found last non-empty bucket
-          flag = false;
-          curBucket = aux.base();
-        }
-      }else{ // empty table
-        flag = false;
-        curBucket = --hashTable.table.end();
-      }
-      curItem = (*curBucket).end();
-    }
+    curBucket = --hashTable.table.end();
+    curItem = (*curBucket).end();
   }
 }
 

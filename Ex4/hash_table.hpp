@@ -26,7 +26,7 @@ namespace cpd{
       unsigned long hash(std::string value);
       unsigned long hash(int value);
     public:
-      // for use of iterator
+      // iterator definitions
       friend class HashIter<T>;
       typedef HashIter<T> iterator;
       typedef ptrdiff_t difference_type;
@@ -34,8 +34,8 @@ namespace cpd{
       typedef T value_type;
       typedef T* pointer;
       typedef T& reference;
-      iterator begin(){return iterator(*this, 0);};
-      iterator end(){return iterator(*this, occupancy);};
+      iterator begin();//{return iterator(*this, true);};
+      iterator end();//{return iterator(*this, false);};
 
       HashTable();
       int getSize();
@@ -53,7 +53,7 @@ namespace cpd{
       typename HashTable<T>::Table::iterator curBucket;
       typename HashTable<T>::Bucket::iterator curItem;
     public:
-      HashIter(HashTable<T>& ht, int offset);
+      HashIter(HashTable<T>& ht, bool isBegin);
       HashIter(HashTable<T>& ht,
         typename HashTable<T>::Table::iterator bucket,
         typename HashTable<T>::Bucket::iterator item);
