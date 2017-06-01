@@ -41,8 +41,8 @@ namespace cpd{
       int getSize();
       int getOccupancy();
       void insert(T item);
-      void remove(iterator item); //TODO change argument to iterator
-      iterator search(T item); //TODO change return to iterator
+      void remove(iterator item);
+      iterator search(T item);
   };
 
     //===============Iterator===============
