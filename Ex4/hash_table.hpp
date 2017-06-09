@@ -34,8 +34,8 @@ namespace cpd{
       typedef T value_type;
       typedef T* pointer;
       typedef T& reference;
-      iterator begin();//{return iterator(*this, true);};
-      iterator end();//{return iterator(*this, false);};
+      iterator begin();
+      iterator end();
 
       HashTable();
       int getSize();
@@ -57,7 +57,9 @@ namespace cpd{
       HashIter(HashTable<T>& ht,
         typename HashTable<T>::Table::iterator bucket,
         typename HashTable<T>::Bucket::iterator item);
-      HashIter(HashIter<T>& hi); // copy constructor
+      HashIter(const HashIter<T>& hi); // copy constructor
+      typename HashTable<T>::Table::iterator getCurBucket();
+      typename HashTable<T>::Bucket::iterator getCurItem();
       bool operator==(const HashIter<T>& other);
       bool operator!=(const HashIter<T>& other);
       T& operator*();

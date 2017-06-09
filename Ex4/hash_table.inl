@@ -9,16 +9,16 @@ cpd::HashTable<T>::HashTable()
 
 template <typename T>
 void cpd::HashTable<T>::resize(){
-  int newSize = tableSize * 2 + 1;
+  int tableSize = tableSize * 2 + 1;
+
   Table aux(table); // copy of current table
 
   table.clear();
-  table.resize(newSize,Bucket());
+  table.resize(tableSize,Bucket());
 
-  for(auto& bucket : aux){
-    for(auto& i : bucket){
+  for(Bucket& bucket : aux){
+    for(T& i : bucket)
       insert(i);
-    }
   }
 }
 
@@ -58,16 +58,16 @@ int cpd::HashTable<T>::getOccupancy(){
 
 template <typename T>
 void cpd::HashTable<T>::insert(T item){
-  table[hash(item) % tableSize].push_back(item);
   occupancy++;
   if(occupancy > 3 * (int)(tableSize / 4)){
     resize();
   }
+  table[hash(item) % tableSize].push_back(item);
 }
 
 template <typename T>
 void cpd::HashTable<T>::remove(iterator item){
-  (*item).curBucket.erase((*item).curItem);
+  (*item.getCurBucket()).erase(item.getCurItem());
   occupancy--;
 }
 
@@ -128,16 +128,27 @@ cpd::HashIter<T>::HashIter(HashTable<T>& ht,
 {}
 
 template <typename T>
-cpd::HashIter<T>::HashIter(HashIter<T>& hi) // copy constructor
+cpd::HashIter<T>::HashIter(const HashIter<T>& hi) // copy constructor
  : hashTable(hi.hashTable),
-   curBucket(hi.curBucket), curItem(hi,curItem)
+   curBucket(hi.curBucket), curItem(hi.curItem)
 {}
 
 template <typename T>
+typename cpd::HashTable<T>::Table::iterator cpd::HashIter<T>::getCurBucket(){
+  return curBucket;
+}
+
+template <typename T>
+typename cpd::HashTable<T>::Bucket::iterator cpd::HashIter<T>::getCurItem(){
+  return curItem;
+}
+
+template <typename T>
 bool cpd::HashIter<T>::operator==(const HashIter<T>& other){
-  bool sameHashTable = this->hashTable == other.hashTable;
+  // bool sameHashTable = this->hashTable == other.hashTable;
+  bool sameBucket = this->curBucket == other.curBucket;
   bool sameItem = this->curItem == other.curItem;
-  return sameHashTable && sameItem;
+  return sameBucket && sameItem;
 }
 
 template <typename T>
@@ -153,21 +164,23 @@ T& cpd::HashIter<T>::operator*(){
 template <typename T>
 cpd::HashIter<T>& cpd::HashIter<T>::operator++(){ // prefix: ++iter
   ++curItem;
-  if(curItem == curBucket.end()){
+  if(curItem == (*curBucket).end()){
     ++curBucket;
     bool flag = true;
     while(flag){
       if(curBucket != hashTable.table.end()){
         if((*curBucket).empty()){
           curBucket++;
+          // curItem = (*curBucket).begin();
         }else{ // found non-empty bucket
           flag = false;
+          curItem = (*curBucket).begin();
         }
       }else{ // end of table
         flag = false;
         curBucket--;
+        curItem = (*curBucket).end();
       }
-      curItem = (*curBucket).begin();
     }
   }
   return *this;
@@ -177,21 +190,23 @@ template <typename T>
 cpd::HashIter<T> cpd::HashIter<T>::operator++(int){ //postfix: iter++
   HashIter<T> clone(*this);
   ++curItem;
-  if(curItem == curBucket.end()){
+  if(curItem == (*curBucket).end()){
     ++curBucket;
     bool flag = true;
     while(flag){
       if(curBucket != hashTable.table.end()){
         if((*curBucket).empty()){
           curBucket++;
+          // curItem = (*curBucket).begin();
         }else{ // found non-empty bucket
           flag = false;
+          curItem = (*curBucket).begin();
         }
       }else{ // end of table
         flag = false;
         curBucket--;
+        curItem = (*curBucket).end();
       }
-      curItem = (*curBucket).begin();
     }
   }
   return clone;

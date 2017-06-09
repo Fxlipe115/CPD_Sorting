@@ -6,16 +6,13 @@
 int main(int argc, char const *argv[]) {
   cpd::HashTable<int> ht;
 
-  ht.insert(1);
-  ht.insert(2);
+  for(int i = 0; i < 17; i++){
+    ht.insert(i);
+    for(auto& i : ht){
+      std::cout << i << " ";
+    }
+    std::cout << std::endl;
+  }
 
-  ht.begin();
-
-  // ht.search("abc");
-  // ht.search("a");
-
-  // for(cpd::HashTable<std::string>::iterator it = ht.begin();it != ht.end();it++){
-  //   std::cout << s << std::endl;
-  // }
   return 0;
 }
