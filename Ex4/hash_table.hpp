@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <stddef.h>
 
 namespace cpd{
 
@@ -40,6 +41,7 @@ namespace cpd{
       HashTable();
       int getSize();
       int getOccupancy();
+      int getCollisions();
       void insert(T item);
       void remove(iterator item);
       iterator search(T item);

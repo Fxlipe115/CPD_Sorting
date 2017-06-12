@@ -1,17 +1,26 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "hash_table.hpp"
 
 
 int main(int argc, char const *argv[]) {
-  cpd::HashTable<int> ht;
+  cpd::HashTable<std::string> ht;
 
-  for(int i = 0; i < 17; i++){
-    ht.insert(i);
-    for(auto& i : ht){
-      std::cout << i << " ";
+  std::ifstream names("nomes.txt");
+  std::string input;
+
+  while(names){
+    std::getline(names,input);
+    if(names){
+      ht.insert(input);
     }
-    std::cout << std::endl;
+  }
+
+  std::cout << "Collisions: " << ht.getCollisions() << "\n";
+  std::cout << "Occupancy: " << ht.getOccupancy() << "\n";
+  for(auto& x : ht){
+    std::cout << x << "\n";
   }
 
   return 0;

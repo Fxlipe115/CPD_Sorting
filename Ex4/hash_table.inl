@@ -9,12 +9,14 @@ cpd::HashTable<T>::HashTable()
 
 template <typename T>
 void cpd::HashTable<T>::resize(){
-  int tableSize = tableSize * 2 + 1;
+  tableSize = tableSize * 2 + 1;
 
   Table aux(table); // copy of current table
 
   table.clear();
   table.resize(tableSize,Bucket());
+
+  occupancy = 1;
 
   for(Bucket& bucket : aux){
     for(T& i : bucket)
@@ -57,9 +59,21 @@ int cpd::HashTable<T>::getOccupancy(){
 }
 
 template <typename T>
+int cpd::HashTable<T>::getCollisions(){
+  int collisions = 0;
+  for(auto& bucket : table){
+    if(bucket.size() > 1){
+        collisions += bucket.size() - 1;
+    }
+  }
+
+  return collisions;
+}
+
+template <typename T>
 void cpd::HashTable<T>::insert(T item){
   occupancy++;
-  if(occupancy > 3 * (int)(tableSize / 4)){
+  if(occupancy > (3 * (int)(tableSize / 4))){
     resize();
   }
   table[hash(item) % tableSize].push_back(item);
